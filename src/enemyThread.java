@@ -1,8 +1,8 @@
 
 public class enemyThread extends Thread{
 	
-	Enemy enemy;
-	int sleeptime;
+	volatile Enemy enemy;
+	volatile int sleeptime;
 	volatile boolean needSleep;
 	volatile boolean isSleeping;
 	
@@ -23,7 +23,9 @@ public class enemyThread extends Thread{
 	
 	public void run(){
 		while(true){
+		//	System.out.println("");
 			if(enemy != null && enemy.getAttacking()){
+				System.out.println("SOMETHING SHOULD BE HAPPENING");
 				this.isSleeping = true;
 				toSleep(sleeptime);
 				enemy.isIdle = true;
@@ -34,13 +36,13 @@ public class enemyThread extends Thread{
 			}
 			
 			if(enemy!= null && enemy.getCurrentHP() <= 0){
+				System.out.println("SOMETHING DIED!");
 				this.isSleeping = true;
 				toSleep(600);
 				enemy.isDead = true;	
 				this.isSleeping = false;
 				this.enemy = null;
 			}
-			
 		}
 	}
 	
@@ -58,6 +60,7 @@ public class enemyThread extends Thread{
 	
 	public void toSleep(int miliseconds){
 		try{
+			System.out.println("HINDI NATUTULOG YUNG THREAD");
 			Thread.sleep(miliseconds);
 		}catch(Exception e){}
 	}
